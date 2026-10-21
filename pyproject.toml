@@ -1,0 +1,30 @@
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+exclude = [
+    ".venv",
+    "README.md",
+    "__pycache__",
+    ".git",
+    "mlruns",
+    "mlartifacts",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # Pyflakes
+    "I",   # import sorting
+    "B",   # flake8-bugbear
+    "UP",  # modern Python syntax
+    "SIM", # simplify unnecessary code
+]
+
+ignore = [
+    "E501", # let Ruff formatter handle line length
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
