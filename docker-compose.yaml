@@ -3,10 +3,13 @@ services:
     image: python:3.12-slim
     container_name: hw8-mlflow
     working_dir: /mlflow
+
     ports:
       - "5001:5001"
+
     volumes:
       - mlflow_data:/mlflow
+
     command: >
       sh -c "
       pip install --no-cache-dir mlflow &&
@@ -15,7 +18,9 @@ services:
       --port 5001
       --backend-store-uri sqlite:////mlflow/mlflow.db
       --artifacts-destination /mlflow/mlartifacts
+      --allowed-hosts 'mlflow:5001,localhost:5001,127.0.0.1:5001'
       "
+
     healthcheck:
       test:
         [
@@ -28,23 +33,33 @@ services:
       timeout: 5s
       retries: 12
       start_period: 60s
+
     restart: unless-stopped
 
   trainer:
     build:
       context: .
       dockerfile: Dockerfile
+
     container_name: hw8-trainer
     working_dir: /app
+
     volumes:
       - .:/app
+
+    ports:
+      - "5002:5002"
+
     environment:
       MLFLOW_TRACKING_URI: http://mlflow:5001
+
     depends_on:
       mlflow:
         condition: service_healthy
+
     stdin_open: true
     tty: true
+
     command: tail -f /dev/null
 
 volumes:
